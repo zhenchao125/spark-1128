@@ -1,2 +1,4 @@
 # Project exclude paths
 /spark-core/target/
+.idea
+spark-1128.iml
