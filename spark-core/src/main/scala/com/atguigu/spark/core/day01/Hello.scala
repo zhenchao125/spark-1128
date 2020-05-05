@@ -1,4 +1,4 @@
-package com.atguigu.spark.core
+package com.atguigu.spark.core.day01
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
