@@ -20,6 +20,7 @@ object MapPartitions {
         })*/
         val rdd2 = rdd1.mapPartitionsWithIndex((index, it) => it.map((_, index)))
         rdd2.collect.foreach(println)
+        
         sc.stop()
         
     }
