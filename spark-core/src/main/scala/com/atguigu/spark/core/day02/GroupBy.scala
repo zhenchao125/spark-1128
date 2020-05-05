@@ -14,8 +14,13 @@ object GroupBy {
         val list1 = List(3, 50, 7, 6, 1, 20)
         val rdd1: RDD[Int] = sc.parallelize(list1, 2)
         
-        val rdd2: RDD[(Int, Iterable[Int])] =rdd1.groupBy(x => x % 2)
-        rdd2.collect.foreach(println)
+        val rdd2: RDD[(Int, Iterable[Int])] = rdd1.groupBy(x => x % 2)
+        // 计算这个集合中, 所有的奇数的和偶数的和
+        //        val rdd3 = rdd2.map(kv => (kv._1, kv._2.sum))
+        val rdd3 = rdd2.map {
+            case (jo, it) => (jo, it.sum)
+        }
+        rdd3.collect.foreach(println)
         sc.stop()
         
     }
