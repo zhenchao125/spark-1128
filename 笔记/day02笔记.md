@@ -144,5 +144,21 @@
 
    作用: 对比数据做评估.
 
+6. `coalesce`
+
+   ```
+   用来改变RDD分区数.
+   coalesce 只能减少分区,不能增加分区. 为啥? 因为coalesce默认是不shuffle
+   如果启动shuffle, 也可以增加分区.
+   
+   以后, 如果减少分区, 尽量不要shuffle, 只有增加的分区的时候才shuffle
+   
+   实际应用:
+       如果减少分区就使用 coalesce
+       如果是增加分区就是用 repartition
+   ```
+
+7. `sortBy`
+
    
 
