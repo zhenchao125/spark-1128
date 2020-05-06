@@ -105,14 +105,12 @@
    ```scala
    所有聚合类的算子都有预聚合
    
-   reduceByKey
+   reduceByKey(使用最多)
        聚合算子:
            只能用在kv形式的聚合.
            按照key进行聚合, 对相同的key的value进行聚合
            
-          
-   
-   foldByKey:
+   foldByKey:(很鸡肋)
    	多一个zero
        1. zero的类型必须是v的类型一致
        2. zero只在分区内聚合(预聚合, map端)的时候参与运算. 
@@ -121,6 +119,20 @@
    	
    	foldByKey reduceByKey 共同点:
    	    他们在分区内聚合和分区间的逻辑是一样.
+   
+   aggregateByKey:(次之)
+   	分区内聚合和分区间的聚合不一样!!!
+   
+   combineByKey: 
+       combineByKey[C](
+             createCombiner: V => C,
+             mergeValue: (C, V) => C,
+             mergeCombiners: (C, C) => C
+           createCombiner: 在每个分区内,不同的key来说, 都会执行一次这个方法, 返回一个值, 
+                           相当于以前的zero
+           mergeValue: 分区内聚合
+           mergeCombiners:分区间的聚合
+   
    ```
 
    
