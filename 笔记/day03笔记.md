@@ -135,5 +135,41 @@
    
    ```
 
+   之间的练习:
+
+   ```scala
+   combineByKey
+       combineByKeyWithClassTag(createCombiner, mergeValue, mergeCombiners)(null)
    
+   aggregateByKey
+       combineByKeyWithClassTag[U]((v: V) => cleanedSeqOp(createZero(), v),
+             cleanedSeqOp, combOp, partitioner)
+   
+   foldByKey
+       combineByKeyWithClassTag[V]((v: V) => cleanedFunc(createZero(), v),
+             cleanedFunc, cleanedFunc, partitioner)
+   
+   reduceByKey
+       combineByKeyWithClassTag[V]((v: V) => v, func, func, partitioner)
+   
+   使用指导:
+       1. 如果分区内和分区间的聚合逻辑不一样, 用 aggregateByKey
+       2. 如果分区内和分区间逻辑一样  reduceByKey
+   ```
+
+   3. `reduceByKey`和`groupByKey`
+
+      - 如果是聚合应用使用`reduceByKey`, 因为他有预聚合, 可以提高性能
+      - 如果分组的目的不是为了聚合, 这个时候就应该使用`groupByKey`
+      - 如果分组的目的是为了聚合, 则不要使用``groupByKey``, 因为他没有预聚合.
+
+   4. 排序
+
+      ```scala
+      sortBy	这个使用更广泛, 可以用在任意的RDD上. 用的更多些
+      	
+      sortByKey 这个只能用在kv上, 按照k进行排序
+      ```
+
+      
 
