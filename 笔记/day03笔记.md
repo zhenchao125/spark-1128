@@ -119,7 +119,8 @@
    		分区间聚合(最终聚合, reduce端)不参与
        3. 对一个key, zero最多参数参与n次 (n是分区数)
    	
-   	
+   	foldByKey reduceByKey 共同点:
+   	    他们在分区内聚合和分区间的逻辑是一样.
    ```
 
    
