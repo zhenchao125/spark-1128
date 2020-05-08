@@ -75,3 +75,35 @@ val rdd2 = rdd1.filter(x => {
 
    - 这三个用的不多.了解就行了. 一般都是应转换型的聚合算子.
 
+  ## 序列化的问题
+
+当我传递给算子的匿名函数是个闭包. 要保证匿名函数中用到的一些属性或者方法要支持序列化
+
+- 函数
+- 属性
+
+1. 让类序列化
+2. 使用匿名函数
+   - 使用局部遍历
+
+新的序列化机制:
+
+`kryo`, 是一个第三方的序列化机制. 比`java`的序列化机制要快,和轻量级.
+
+`spark2.0`才开始支持. 在内部,值类型和值类型的数组已经默认采用这种机制
+
+自定义类型, 需要做一些配置:
+
+```scala
+// 更好序列器
+.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+// 注册需要序列化的类
+.registerKryoClasses(Array(classOf[Searcher2]))
+```
+
+
+
+> 注意: 即使换成了`kryo`序列化, 自定义的类型也需要实现`Serializable`
+
+
+
