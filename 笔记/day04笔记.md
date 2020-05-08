@@ -105,5 +105,33 @@ val rdd2 = rdd1.filter(x => {
 
 > 注意: 即使换成了`kryo`序列化, 自定义的类型也需要实现`Serializable`
 
+# job的划分
+
+```
+application
+	应用. 创建一个SparkContext可以认为创建了一个Application.
+job
+	在一个application中, 每执行一次行动算子, 就会创建一个job
+stage
+	阶段. 默认会有一个stage, 再每碰到一个shuffle算子, 会产生一个新的stage
+	一个job中,可以包含多个stage
+task
+	任务. 表示咱们阶段执行的时候的并行度.
+	假设一个RDD 有100个分区. 处理的时候,每个分区的数据, 分配一个task来计算
+	一个阶段会有多个task. 
+	分区, 是站数据的存储角度
+	task, 是站的计算的角度
+	分数数和task是相等.
+	
+	
+总结:
+	application
+		多个job
+			多个stage
+				多个task
+				
+dag: 有向无环图
+```
+
 
 

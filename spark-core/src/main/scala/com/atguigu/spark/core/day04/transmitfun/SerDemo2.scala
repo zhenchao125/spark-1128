@@ -24,7 +24,12 @@ object SerDemo2 {
         val result: RDD[String] = searcher.getMatchedRDD1(rdd)
         
         result.collect.foreach(println)
+        result.collect.foreach(println)
+        result.count()
+        Thread.sleep(1000000)
+       
     }
+    
 }
 
 //需求: 在 RDD 中查找出来包含 query 子字符串的元素
