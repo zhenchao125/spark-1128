@@ -1,7 +1,9 @@
 package com.atguigu.spark.core.day04.action
 
 import org.apache.spark.rdd.RDD
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
+
+import scala.reflect.ClassTag
 
 /**
  * Author atguigu
@@ -20,11 +22,11 @@ object Aggregate {
         ) - Int.MinValue*/
     
         val list1 = List("a", "b", "c", "d", "e", "f")
-        val rdd1= sc.parallelize(list1, 3)
+        val rdd1: RDD[String] = sc.parallelize(list1, 3)
         
-        val result = rdd1.aggregate("?")(_ + _, _ + _)
-    
-        println(result)
+        /*val result = rdd1.aggregate("?")(_ + _, _ + _)
+        */
+        
         sc.stop()
         
     }
