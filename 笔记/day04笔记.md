@@ -133,5 +133,33 @@ task
 dag: 有向无环图
 ```
 
+# 持久化和checkpoint的比较
+
+1. 持久化
+
+   ```scala
+   1. 使用方式
+       rdd.persist(存储级别)
+       rdd.cache
+   2. 不会重新起job来专门的持久化. 而是使用上一个job的结果来进行持久化
+   3. 血缘还在. rdd2 的血缘关系还在. 一旦持久化的出现问题, 可以通过血缘关系重建rdd
+   ```
+
+2. `checkepoint`
+
+   ```scala
+   1. 使用方式
+      sc.setCheckpointDir("./ck1")
+      rdd.checkpoint()
+   2. checkpoint的时候, 会重新启动一个新的job来专门的做checkpoint
+   3. checkpoint会切断 rdd 的血缘关系.
+   ```
+
+   > 不管是持久化还是`checkepoint`, 都是针对在同一个` app`中使用
+   >
+   > `rdd`被重复使用才需要做缓存或checkpoint
+
+   > 注意: 在实际使用的时候, 一般会把缓存和checkpoint配合起来使用.
+
 
 
