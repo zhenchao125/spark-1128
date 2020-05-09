@@ -134,7 +134,14 @@ rdd1.saveAsObjectFile("./obj")
 val rdd1 = sc.objectFile[String]("./obj")
 ```
 
+## jdbc
 
+读:
+
+写:
+
+1. 把所有的数据拉倒驱动, 然后在驱动统一使用`jdbc`来写入.  如果数据量, 这个容易`oom`
+2. 数据计算完毕, 直接写到`jdbc`.(重点)
 
 
 
