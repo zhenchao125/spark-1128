@@ -8,17 +8,21 @@ object SumAccumulatorDemo{
     def main(args: Array[String]): Unit = {
         val conf: SparkConf = new SparkConf().setAppName("SumAccumulatorDemo").setMaster("local[2]")
         val sc: SparkContext = new SparkContext(conf)
+        sc.setCheckpointDir("./ck1")
         val list1 = List(30, 50, 70, 60, 10, 20)
         val rdd1: RDD[Int] = sc.parallelize(list1, 2)
     
         val acc = new SumAccumulator
         // 必须要向SparkContext注册累加器
         sc.register(acc, "first")
-        rdd1.foreach(x => {
+        val rdd2 = rdd1.map(x => {
             acc.add(x)
+            x
         })
+        rdd2.checkpoint()
+        rdd2.collect
         println(acc.value)
-        
+        Thread.sleep(10000000)
         sc.stop()
         
     }

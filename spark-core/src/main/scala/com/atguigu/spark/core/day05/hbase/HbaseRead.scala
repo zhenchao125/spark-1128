@@ -1,3 +1,4 @@
+/*
 package com.atguigu.spark.core.day05.hbase
 
 import java.util
@@ -65,4 +66,4 @@ object HbaseRead {
 
 /*
 foreachPartition
- */
+ */*/

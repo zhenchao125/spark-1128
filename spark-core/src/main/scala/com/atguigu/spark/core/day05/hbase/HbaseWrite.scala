@@ -1,3 +1,4 @@
+/*
 package com.atguigu.spark.core.day05.hbase
 
 import org.apache.hadoop.conf.Configuration
@@ -52,3 +53,4 @@ object HbaseWrite {
         
     }
 }
+*/
