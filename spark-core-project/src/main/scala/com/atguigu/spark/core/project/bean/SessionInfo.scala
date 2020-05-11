@@ -2,7 +2,7 @@ package com.atguigu.spark.core.project.bean
 
 case class SessionInfo(sid: String,
                        count: Int) extends Ordered[SessionInfo]{
-    // 对咱们业务来说, 千万不要反会0.
+    // 对咱们业务来说, 千万不要返回0.
     // 如果返回0 在set中会去重
     override def compare(that: SessionInfo): Int = {
         if(this.count > that.count) -1
