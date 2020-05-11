@@ -3,7 +3,7 @@ package com.atguigu.spark.core.day05.jdbc
 import java.sql.DriverManager
 
 import org.apache.spark.rdd.JdbcRDD
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.{RangePartitioner, SparkConf, SparkContext}
 
 /**
  * Author atguigu

@@ -3,6 +3,8 @@ package com.atguigu.spark.core.day05.acc
 import org.apache.spark.util.AccumulatorV2
 import org.apache.spark.{SparkConf, SparkContext}
 
+import scala.collection.mutable
+
 /**
  * Author atguigu
  * Date 2020/5/9 16:20
