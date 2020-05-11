@@ -1,8 +1,10 @@
 package com.atguigu.spark.core.project.app
 
-import com.atguigu.spark.core.project.bean.{CategroyCount, UserVisitAction}
+import com.atguigu.spark.core.project.bean.{CategroyCount, SessionInfo, UserVisitAction}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
+
+import scala.collection.mutable
 
 /**
  * Author atguigu
@@ -39,11 +41,10 @@ object CategorySessionTopApp {
     def statCategoryTop10Session_1(sc: SparkContext,
                                    categoryCountList: List[CategroyCount],
                                    userVisitActionRDD: RDD[UserVisitAction]) = {
-        // 1. 过滤出来 top10品类的所有点击记录
-        // 1.1 先map出来top10的品类id
+        
         val cids = categoryCountList.map(_.cid.toLong)
         val topCategoryActionRDD: RDD[UserVisitAction] = userVisitActionRDD.filter(action => cids.contains(action.click_category_id))
-        // 2. 计算每个品类 下的每个session 的点击量  rdd ((cid, sid) ,1)
+        
         val cidAndSidCount: RDD[(Long, (String, Int))] = topCategoryActionRDD
             .map(action => ((action.click_category_id, action.session_id), 1))
             .reduceByKey(_ + _)
@@ -61,8 +62,42 @@ object CategorySessionTopApp {
             println(arr.toList)
             
         }
+    }
+    
+    def statCategoryTop10Session_2(sc: SparkContext,
+                                   categoryCountList: List[CategroyCount],
+                                   userVisitActionRDD: RDD[UserVisitAction]) = {
+        // 1. 过滤出来 top10品类的所有点击记录
+        // 1.1 先map出来top10的品类id
+        val cids = categoryCountList.map(_.cid.toLong)
+        val topCategoryActionRDD: RDD[UserVisitAction] = userVisitActionRDD.filter(action => cids.contains(action.click_category_id))
+        // 2. 计算每个品类 下的每个session 的点击量  rdd ((cid, sid) ,1)
+        val cidAndSidCount: RDD[(Long, (String, Int))] = topCategoryActionRDD
+            .map(action => ((action.click_category_id, action.session_id), 1))
+            .reduceByKey(_ + _)
+            .map {
+                case ((cid, sid), count) => (cid, (sid, count))
+            }
+        //   3. 按照品类分组,
+        val cidAndSidCountGrouped: RDD[(Long, Iterable[(String, Int)])] = cidAndSidCount.groupByKey()
+        // 4. 排序, 取top10
+        val result = cidAndSidCountGrouped.map {
+            case (cid, sidCountIt) =>
+                // sidCountIt 要排序, 但是又不想转成容器式的集合? 怎么做?
+                // 如果不转, 绝对不能用scala的sortBy !
+                // 找一个可以自动排序的集合(TreeSet), 只需要让TreeSet集合的长度保持10就行了.
+                var set: mutable.TreeSet[SessionInfo] = mutable.TreeSet[SessionInfo]()
+                sidCountIt.foreach {
+                    case (sid, count) =>
+                        val info: SessionInfo = SessionInfo(sid, count)
+                        set += info
+                        if (set.size > 10) set = set.take(10)
+                }
+                (cid, set.toList)
+        }
         
-        Thread.sleep(10000000)
+        result.collect.foreach(println)
         
+        Thread.sleep(1000000)
     }
 }
