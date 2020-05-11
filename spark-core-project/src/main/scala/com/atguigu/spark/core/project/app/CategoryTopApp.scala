@@ -39,10 +39,7 @@ object CategoryTopApp {
             .take(10)
         
         // 5. 把结果写到外部存储(jdbc)  TODO
-        
-        
-        println(result)
-        
+        result  // 把需求1的结果返回, 给需求2使用
     }
 }
 

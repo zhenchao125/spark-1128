@@ -1,6 +1,6 @@
 package com.atguigu.spark.core.project.app
 
-import com.atguigu.spark.core.project.bean.UserVisitAction
+import com.atguigu.spark.core.project.bean.{CategroyCount, UserVisitAction}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -33,9 +33,10 @@ object ProjectApp {
                 splits(11),
                 splits(12).toLong)
         })
-        // 3. 需求1的分析
-        CategoryTopApp.calcCategoryTop10(sc, userVisitActionRDD)
-        
+        // 3. 需求1的分析   返回值是top10的品类id
+        val categoryCountList: List[CategroyCount] = CategoryTopApp.calcCategoryTop10(sc, userVisitActionRDD)
+       // 4. 需求2的分析
+        CategorySessionTopApp.statCategoryTop10Session_1(sc, categoryCountList, userVisitActionRDD)
         
         sc.stop()
     }
