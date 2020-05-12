@@ -36,7 +36,7 @@ object ProjectApp {
         // 3. 需求1的分析   返回值是top10的品类id
         val categoryCountList: List[CategroyCount] = CategoryTopApp.calcCategoryTop10(sc, userVisitActionRDD)
        // 4. 需求2的分析
-        CategorySessionTopApp.statCategoryTop10Session_2(sc, categoryCountList, userVisitActionRDD)
+        CategorySessionTopApp.statCategoryTop10Session_3(sc, categoryCountList, userVisitActionRDD)
         
         sc.stop()
     }
