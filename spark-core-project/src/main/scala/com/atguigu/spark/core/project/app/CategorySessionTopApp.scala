@@ -120,6 +120,7 @@ object CategorySessionTopApp {
         // 2. 计算每个品类 下的每个session 的点击量  rdd ((cid, sid) ,1)
         val cidAndSidCount: RDD[(Long, (String, Int))] = topCategoryActionRDD
             .map(action => ((action.click_category_id, action.session_id), 1))
+            // 使用自定义分区器  重点理解分区器的原理
             .reduceByKey(new CategoryPartitioner(cids), _ + _)
             .map {
                 case ((cid, sid), count) => (cid, (sid, count))
