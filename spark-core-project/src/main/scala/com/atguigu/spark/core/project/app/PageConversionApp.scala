@@ -1,5 +1,7 @@
 package com.atguigu.spark.core.project.app
 
+import java.text.DecimalFormat
+
 import com.atguigu.spark.core.project.bean.UserVisitAction
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
@@ -42,7 +44,7 @@ object PageConversionApp {
                 // 1->2  2->3   4->5
                 // 3.2 按照时间进行排序
                 val actions = actionIt.toList.sortBy(_.action_time)
-                // 3.3 计算调整量   如果能有一个集合存储就是  "1->2",  "2->3", "1->5", ....
+                // 3.3 计算跳转量   如果能有一个集合存储就是  "1->2",  "2->3", "1->5", ....
                 val preActions = actions.init // 干掉最后一个
                 val posActions = actions.tail // 干掉第一个
                 // 3.4 结果中有各种转换流, 我们只需要 1->2 2->3 3->3
@@ -55,14 +57,15 @@ object PageConversionApp {
         }
         // 3.2 聚合跳转流
         val pageFlowCount: Array[(String, Int)] = pagesFlowRDD.map((_, 1)).reduceByKey(_ + _).collect
-        
+    
+        val f = new DecimalFormat(".00%")
         // 4. 计算跳转率  ("1->2", 1000)   找页面1的点击量 10000     10%
         val result = pageFlowCount.map {
             case (flow, count) =>
                 // 4.1 1->2  找到页面1的点击量
                 val page = flow.split("->")(0).toLong
                 val denominator = pageAndCount(page)
-                (flow, count.toDouble / denominator)
+                (flow, f.format(count.toDouble / denominator))
         }
         
         result.foreach(println)
