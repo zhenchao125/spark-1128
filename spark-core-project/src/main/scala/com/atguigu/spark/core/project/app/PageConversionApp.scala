@@ -20,7 +20,9 @@ object PageConversionApp {
         // 1.1 目标跳转流 (想要的流)
         val postPages = pages.tail
         // "1->2"  "2->3"  ....
-        val targetFlows = prePages.zip(postPages).map(prePost => prePost._1 + "->" + prePost._2)
+        val targetFlows = prePages
+            .zip(postPages)
+            .map(prePost => prePost._1 + "->" + prePost._2)
         
         // 2. 计算分母  prePages中所有页面的访问量
         val pageAndCount: collection.Map[Long, Long] = userVisitActionRDD
