@@ -34,9 +34,11 @@ object ProjectApp {
                 splits(12).toLong)
         })
         // 3. 需求1的分析   返回值是top10的品类id
-        val categoryCountList: List[CategroyCount] = CategoryTopApp.calcCategoryTop10(sc, userVisitActionRDD)
+//        val categoryCountList: List[CategroyCount] = CategoryTopApp.calcCategoryTop10(sc, userVisitActionRDD)
        // 4. 需求2的分析
-        CategorySessionTopApp.statCategoryTop10Session_3(sc, categoryCountList, userVisitActionRDD)
+//        CategorySessionTopApp.statCategoryTop10Session_3(sc, categoryCountList, userVisitActionRDD)
+        // 5. 需求3   1->2   2->3 3->4 ... 6->7
+        PageConversionApp.statPageConversionRate(sc, userVisitActionRDD, "1,2,3,4,5,6,7")
         
         sc.stop()
     }
