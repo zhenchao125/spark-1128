@@ -193,7 +193,11 @@ spark.sql("select * from json.`examples/src/main/resources/people.json`").show
   df.write.mode("append").json("./user")
   ```
 
-  
+
+
+# 五 `spark`整合`hive`
+
+
 
 
 
