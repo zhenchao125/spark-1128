@@ -3,4 +3,6 @@
 .idea
 spark-1128.iml
 /spark-core-project/target/
+*/target
+*/*.iml
 
