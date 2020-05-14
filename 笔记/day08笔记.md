@@ -101,3 +101,16 @@ ds->rdd
 
 
 
+```scala
+df -> ds
+ 1. 有样例类
+ 2. df.as[样例类]
+
+ds -> df
+	ds.toDF
+```
+
+
+
+总结: 
+
