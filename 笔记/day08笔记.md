@@ -197,9 +197,43 @@ spark.sql("select * from json.`examples/src/main/resources/people.json`").show
 
 # 五 `spark`整合`hive`
 
+有两种整合方式:
 
+1. `hive on spark`
 
+   `hive on mr, hive on tez(hive 3.0开始, 默认)`
 
+   是几家比较大的公司, 联合搞起来. 但是到目前, 用的人极少, 还是实验方案.
 
+   `hive的版本和spark`的兼容性问题比较大
 
+2. `spark on hive`(`spark`官方整出来)
+
+   其实就是咱们讲的`spark-sql`
+
+   我们使用的官方的版本, 内部已经编译进去了`hive`
+
+## `spark on hive`两种整合hive
+
+1. 内置`hive`
+
+   - 默认是使用的内置`hive`
+
+   - 企业中一般不会使用这种内置`hive`
+
+2. 接管外置的`hive`(重点)
+
+   数据都在`hive`上, `spark`还要找到`hive`
+
+   1. 把`hive-site.xml`拷贝到`spark`配置目录下(目的: 找到`hive`元数据)
+
+      `tez`的配置去掉
+
+   2. 拷贝`mysql`驱动
+
+   3. 如果还有报错: 有些情况下, 需要拷贝`core-site.xml, hdfs-site.xml`
+
+      
+
+   
 
