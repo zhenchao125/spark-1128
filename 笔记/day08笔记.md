@@ -89,6 +89,15 @@ df->rdd
 > ```scala
 > ds.filter(_ > 30).show()
 > ```
->
-> 
+
+```
+rdd和ds转换
+rdd->ds(简单到复杂: 需要样例类)
+	1. 在rdd中存储样例类
+	2. rdd.toDS
+ds->rdd
+	ds.rdd   (df.rdd)
+```
+
+
 
