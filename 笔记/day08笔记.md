@@ -132,11 +132,68 @@ ds -> df
   spark.udf.register("myToUpper", (s: String) => s.toUpperCase)
   ```
 
+- `udaf`
+
+  - `UserDefinedAggregateFunction`
+
+    只用用于`df`上. 只能用在`sql`语句中.
+
+# 四. 数据源
+
+## 读
+
+- 一种通用写法
+
+  ```scala
+  spark.read.format("json").load("examples/src/main/resources/people.json")
+  ```
+
+  `json`表示文件个数
+
+  `load` 路径
+
+  `format`默认格式`parquet`
+
+- 一种专用写法
+
+  ```scala
+  spark.read.json("")   // foramt("json").load("")
+  ```
+
+正常情况, 如果要执行`sql`, 要先创建及临时表. 其实`spark-sql`支持直接在文件上执行`sql`
+
+```scala
+spark.sql("select * from json.`examples/src/main/resources/people.json`").show
+```
+
+## 写
+
+- 一种通用的写
+
+  ```scala
+  df.write.format("json").save("./user")
+  ```
+
+  在写的时候, 如果路径已经存在, 则默认抛出异常!
+
+  可以使用模式来控制:
+
+  ```scala
+  .mode("error")  // 默认值
+  "append"  //追加
+  "overwrite"  // 覆盖
+  "ignore"  // 如果文件存在忽略这次操作. 不存在, 则写入
+  ```
+
   
 
+- 一种转用的写
 
+  ```scala
+  df.write.mode("append").json("./user")
+  ```
 
-
+  
 
 
 
