@@ -112,5 +112,33 @@ ds -> df
 
 
 
-总结: 
+# 三. 自定义函数
+
+`UDF` 1进1出
+
+`UDAF`聚合函数  多进1出
+
+`UDTF`(`flatMap`) 1进多出
+
+> hive: 如何自定义函数
+>
+> 定义类, 继承系统提供的函数, 打包, 放在hive的lib目录, 还需要注册...
+
+`spark`中自定义函数及其简单: `scala` 是函数式编程, 所以自定义函数, 直接用时候用匿名函数非常方便.
+
+- `udf`
+
+  ```scala
+  spark.udf.register("myToUpper", (s: String) => s.toUpperCase)
+  ```
+
+  
+
+
+
+
+
+
+
+
 
