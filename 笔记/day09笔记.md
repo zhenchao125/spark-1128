@@ -62,3 +62,42 @@ hive="/opt/module/spark-yarn/bin/spark-sql --master yarn --deply-mode client"
 注意:
 
 - 在yarn模式, `spark-sql, spark-shell`只支持`--deploy-moe client` 不支持``--deploy-moe cluster`
+
+
+
+> `hive`
+
+```
+hiveserver2(服务器) + jdbc 客户端(beeline)
+```
+
+> `spark-sql`
+
+## 代码中访问hive
+
+1. `sparkSession`支持`hive`  
+
+   ```
+   .enableHiveSupport()
+   ```
+
+2. 添加依赖
+
+   ```
+   <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-hive_2.11</artifactId>
+       <version>2.1.1</version>
+   </dependency>
+   ```
+
+3. `copy hive-site.xml 到 resources`目录下
+
+
+
+
+
+
+
+
+
