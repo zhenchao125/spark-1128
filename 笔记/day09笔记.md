@@ -95,6 +95,10 @@ hiveserver2(服务器) + jdbc 客户端(beeline)
 
 
 
+# 关于200
+
+在`spark-sql`如果是`shuffle`, 那么`shuffle`后的分区默认是`200`
+
 
 
 

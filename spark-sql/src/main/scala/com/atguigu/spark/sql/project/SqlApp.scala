@@ -1,5 +1,7 @@
 package com.atguigu.spark.sql.project
 
+import java.text.DecimalFormat
+
 import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
@@ -12,11 +14,13 @@ import scala.collection.immutable.Nil
  */
 object SqlApp {
     def main(args: Array[String]): Unit = {
+        System.setProperty("HADOOP_USER_NAME", "atguigu")
         val spark: SparkSession = SparkSession
             .builder()
             .master("local[*]")
             .appName("SqlApp")
             .enableHiveSupport()
+            .config("spark.sql.shuffle.partitions", 10)
             .getOrCreate()
         spark.sql("use spark1128")
         
@@ -60,16 +64,22 @@ object SqlApp {
               |""".stripMargin).createOrReplaceTempView("t3")
         
         // 4. top3
-        spark.sql(
-            """
-              |select
-              |    area,
-              |    product_name,
-              |    count,
-              |    remark
-              |from t3
-              |where rk<=3
-              |""".stripMargin).show(1000)
+        spark
+            .sql(
+                """
+                  |select
+                  |    area,
+                  |    product_name,
+                  |    count,
+                  |    remark
+                  |from t3
+                  |where rk<=3
+                  |""".stripMargin)
+            .coalesce(1) // 降低分区
+            .write
+            .mode("append")
+            .saveAsTable("result")
+        //.show(1000, false) // 参数2: 是否截断. 如果内容太长, 默认截断 ...
         
         spark.close()
     }
@@ -115,10 +125,46 @@ class CityRemarkUDAF extends UserDefinedAggregateFunction {
     }
     
     // 分区间聚合
-    override def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = ???
+    override def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
+        // 把数据合并, 再放入到buffer1中
+        val map1 = buffer1.getMap[String, Long](0)
+        val total1 = buffer1.getLong(1)
+        
+        val map2 = buffer2.getMap[String, Long](0)
+        val total2 = buffer2.getLong(1)
+        
+        // 1. 先合并总数
+        buffer1(1) = total1 + total2
+        // 2. 合并map
+        buffer1(0) = map1.foldLeft(map2) {
+            case (map, (city, count)) =>
+                map + (city -> (map.getOrElse(city, 0L) + count))
+        }
+    }
     
     // 返回最终的值
-    override def evaluate(buffer: Row): Any = ???
+    override def evaluate(buffer: Row): Any = {
+        val cityCount = buffer.getMap[String, Long](0)
+        val total = buffer.getLong(1)
+        
+        // 北京21.2%，天津13.2%，其他65.6%   排序取前2
+        val cityCountTop2: List[(String, Long)] = cityCount.toList.sortBy(-_._2).take(2)
+        
+        val cityRemarkTop2: List[CityRemark] = cityCountTop2.map {
+            case (city, count) => CityRemark(city, count.toDouble / total)
+        }
+        // top2 + 其他
+        val cityRemarks = cityRemarkTop2 :+ CityRemark("其他", cityRemarkTop2.foldLeft(1D)(_ - _.rate))
+        
+        cityRemarks.mkString(", ")
+    }
+}
+
+case class CityRemark(city: String, rate: Double) {
+    val f = new DecimalFormat(".00%")
+    
+    // 北京21.20%
+    override def toString: String = s"$city:${f.format(rate)}"
 }
 
 /*
