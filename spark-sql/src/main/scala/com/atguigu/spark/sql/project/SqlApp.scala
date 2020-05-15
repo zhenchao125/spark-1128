@@ -4,7 +4,7 @@ import java.text.DecimalFormat
 
 import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.{Row, SaveMode, SparkSession}
 
 import scala.collection.immutable.Nil
 
@@ -77,7 +77,7 @@ object SqlApp {
                   |""".stripMargin)
             .coalesce(1) // 降低分区
             .write
-            .mode("append")
+            .mode(SaveMode.Overwrite)
             .saveAsTable("result")
         //.show(1000, false) // 参数2: 是否截断. 如果内容太长, 默认截断 ...
         
