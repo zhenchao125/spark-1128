@@ -14,12 +14,13 @@ object HiveWrite {
             .master("local[*]")
             .appName("HiveWrite")
             .enableHiveSupport()
+            // 配置仓库的地址
+            .config("spark.sql.warehouse.dir", "hdfs://hadoop102:9000/user/hive/warehouse")
             .getOrCreate()
-        import spark.implicits._
-        spark.sql("use spark1128")
+//        spark.sql("use spark1128")
         // 1. 先有df
         //        val df = spark.read.json("c:/json/people.json")
-        val df = List(("a", 11L), ("b", 22L)).toDF("n", "a")
+        //        val df = List(("a", 11L), ("b", 22L)).toDF("n", "a")
         //        df.printSchema()
         // 2. 写法1: 使用saveAsTable
         //        df.write.saveAsTable("user_1")
@@ -31,10 +32,13 @@ object HiveWrite {
         
         // 4. 写法3: 使用 hive的insert 语句
         
-        spark.sql("insert into table user_1 values('zs', 100)").show
+        //        spark.sql("insert into table user_1 values('zs', 100)").show
+        //
+        //        spark.sql("select * from user_1").show
         
-        spark.sql("select * from user_1").show
         
+        // 创建数据库
+        spark.sql("create database test1129").show
         spark.close()
     }
 }
