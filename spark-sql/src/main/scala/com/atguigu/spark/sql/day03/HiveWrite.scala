@@ -18,16 +18,16 @@ object HiveWrite {
         import spark.implicits._
         spark.sql("use spark1128")
         // 1. 先有df
-//        val df = spark.read.json("c:/json/people.json")
+        //        val df = spark.read.json("c:/json/people.json")
         val df = List(("a", 11L), ("b", 22L)).toDF("n", "a")
-//        df.printSchema()
+        //        df.printSchema()
         // 2. 写法1: 使用saveAsTable
         //        df.write.saveAsTable("user_1")
-//        df.write.mode("append").saveAsTable("user_1")
+        //        df.write.mode("append").saveAsTable("user_1")
         
         // 3. 写法2: 使用 insertInto
         //        df.write.insertInto("user_1")  // 大致等价于: df.write.mode("append").saveAsTable("user_1")
-       // df.write.insertInto("user_1")  // 大致等价于: df.write.mode("append").saveAsTable("user_1")
+        // df.write.insertInto("user_1")  // 大致等价于: df.write.mode("append").saveAsTable("user_1")
         
         // 4. 写法3: 使用 hive的insert 语句
         
@@ -35,10 +35,7 @@ object HiveWrite {
         
         spark.sql("select * from user_1").show
         
-        
         spark.close()
-        
-        
     }
 }
 
