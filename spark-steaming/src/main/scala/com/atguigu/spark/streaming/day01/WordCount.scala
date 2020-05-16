@@ -10,6 +10,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
  */
 object WordCount {
     def main(args: Array[String]): Unit = {
+        //        System.getProperty("java.class.path").split(";").foreach(println)
         // 1. 先有上下文:  StreamingContext
         val conf = new SparkConf().setMaster("local[2]").setAppName("WordCount")
         val ssc = new StreamingContext(conf, Seconds(3))
@@ -21,6 +22,7 @@ object WordCount {
         resultStream.print(100)
         // 4. 启动流
         ssc.start()
+        
         // 5. 阻止程序退出
         ssc.awaitTermination()
     }
