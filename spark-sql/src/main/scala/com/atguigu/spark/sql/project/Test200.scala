@@ -8,9 +8,9 @@ import org.apache.spark.sql.SparkSession
  */
 object Test200 {
     def main(args: Array[String]): Unit = {
+        System.setProperty("HADOOP_USER_NAME", "atguigu")
         val spark: SparkSession = SparkSession
             .builder()
-            .master("local[*]")
             .appName("Test200")
             .enableHiveSupport()
             .getOrCreate()
