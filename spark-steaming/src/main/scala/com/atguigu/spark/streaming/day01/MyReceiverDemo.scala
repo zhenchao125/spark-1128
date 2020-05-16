@@ -41,6 +41,7 @@ class MyReceiver(host: String, port: Int) extends Receiver[String](storageLevel 
     var reader: BufferedReader = _
     
     override def onStart(): Unit = {
+        // 防止阻塞onStart, 所以把代码在子线程中执行
         runInThread {
             try {
                 // 从socket读数据
