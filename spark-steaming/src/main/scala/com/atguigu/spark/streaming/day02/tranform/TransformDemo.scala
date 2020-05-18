@@ -1,4 +1,4 @@
-package com.atguigu.spark.streaming.day02.kafka.tranform
+package com.atguigu.spark.streaming.day02.tranform
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}

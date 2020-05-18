@@ -46,5 +46,9 @@
 
 `updateStateByKey(*func*)`
 
+作用:
+
+1. 用来替换无状态的聚合函数.
+
 
 
