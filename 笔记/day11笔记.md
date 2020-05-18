@@ -23,3 +23,28 @@
 1. `PreferConsistent` 大多数用这个
 2. `PreferBrokers` `executor`和`broker`在同一个设备
 3. `PreferFixed`  当数据发生严重倾斜的时候
+
+# 转换操作
+
+## 无状态的转换
+
+这个转换仅仅针对当前批次, 批次与批次之间有关系.
+
+针对聚合算子:  用的和`RDD`一样的算子都是无状态的算子.
+
+### ` transform`算子
+
+流是由`RDD`组成
+
+` transform` 可以得到每个批次内的那个`RDD`
+
+有啥用?
+
+流的算子不够丰富, 没有`RDD`多. 可以通过这个方法, 得到`RDD`,然后操作`RDD` 
+
+## 有状态的转换
+
+`updateStateByKey(*func*)`
+
+
+
