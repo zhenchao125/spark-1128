@@ -13,6 +13,8 @@
         <module>spark-core-project</module>
         <module>spark-sql</module>
         <module>spark-steaming</module>
+        <module>mock-realdata</module>
+        <module>spark-streaming-project</module>
     </modules>
 
     <dependencies>
