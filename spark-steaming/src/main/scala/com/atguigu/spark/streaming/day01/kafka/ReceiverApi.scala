@@ -1,3 +1,4 @@
+/*
 package com.atguigu.spark.streaming.day01.kafka
 
 import org.apache.spark.SparkConf
@@ -34,3 +35,4 @@ object ReceiverApi {
         
     }
 }
+*/

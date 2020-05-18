@@ -1,3 +1,4 @@
+/*
 package com.atguigu.spark.streaming.day01.kafka
 
 import kafka.serializer.StringDecoder
@@ -45,3 +46,4 @@ object ReceiverApi_2 {
         
     }
 }
+*/
