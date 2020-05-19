@@ -1,28 +1,15 @@
 package com.atguigu.spark.streaming.project.app
 
 import com.atguigu.spark.streaming.project.bean.AdsInfo
-import com.atguigu.spark.streaming.project.util.MyKafkaUtil
-import org.apache.spark.SparkConf
-import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.streaming.StreamingContext
+import org.apache.spark.streaming.dstream.DStream
 
 /**
  * Author atguigu
  * Date 2020/5/18 15:32
  */
-object AreaAdsTopApp {
-    
-    def main(args: Array[String]): Unit = {
-        val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("AreaAdsTopApp")
-        val ssc = new StreamingContext(conf, Seconds(3))
-        ssc.checkpoint("./ck1")
-        
-        val adsInfoStream = MyKafkaUtil
-            .getKafkaStream(ssc, "ads_log1128")
-            .map(log => {
-                val splits: Array[String] = log.split(",")
-                AdsInfo(splits(0).toLong, splits(1), splits(2), splits(3), splits(4))
-            })
-        
+object AreaAdsTopApp extends App {
+    override def doSomething(ssc: StreamingContext, adsInfoStream: DStream[AdsInfo]): Unit = {
         // 需求分析:
         /*
         
@@ -49,11 +36,6 @@ object AreaAdsTopApp {
                 it.toList.sortBy(-_._2).take(3)
             })
             .print
-        
-        
-        ssc.start()
-        ssc.awaitTermination()
-        
     }
 }
 
